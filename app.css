@@ -1,0 +1,132 @@
+/* Your styles should be mobile-first and responsive */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Permanent+Marker&display=swap');
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  margin: 20px;
+  font-family: 'Open Sans', sans-serif;
+  
+}
+
+h1 {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 50px;
+  text-align: center;
+  margin-top: 0;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background-color: blue;
+  color: white;
+  border-bottom: 2px solid black;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  margin: 20px;
+}
+
+.border {
+  border: 3px solid black;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+#form-group {
+  border: solid blue 2px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px blue;
+  padding: 20px 30px 0 30px;
+  font-size: 1.2em;
+}
+
+form p {
+  font-weight: bold;
+}
+
+button {
+  margin: 30px auto;
+  font-size: 1.8.em;
+  padding: 8px 20px;
+}
+
+#question {
+ font-weight: bold;
+ font-size: 1.5em;
+ padding-top: 15px;
+ padding-bottom: 30px;
+}
+
+#progressResults {
+  padding-top: 30px;
+}
+
+#result {
+  font-weight: bold;
+  font-size: 1.5em;
+  padding: 10px 30px;
+  border-top: thin black solid;
+  border-bottom: thin black solid;
+  width: 100%;
+  text-align: center;
+  background-color: lightblue;
+}
+
+section#answerBlock {
+  padding: 15px 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  margin: 30px auto;
+}
+
+section#answer{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+section#commentary {
+  font-size: .8em;
+  font-weight: normal;
+}
+
+.correctAnswer {
+  color: green;
+}
+
+.incorrectAnswer {
+  color: red;
+}
+
+section#movieClip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 0px;
+  box-shadow: 2px 2px 5px black;
+}
+
+section#movieClip h2 {
+  font-size: 2em;
+}
+
+section#newTabNotice {
+  text-align: center;
+  font-size: .8em;
+  padding: 10px 4%;
+}
+
+a img {
+  padding: 10px 4%;
+  margin: 0px;
+  width: 92%;
+}
