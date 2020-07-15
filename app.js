@@ -140,6 +140,11 @@ const store = {
   ],
   quizStarted: false,
   correct: true,
+  submitDisabled: 'disabled',
+  optionA: '',
+  optionB: '',
+  optionC: '',
+  optionD: '',
   answerStatusClass:  '',
   answerStatus: '',
   questionNumber: 0,
@@ -176,7 +181,12 @@ function startQuiz() {
 function checkAnswer() {
   const selectedAnswer = $('input[name=guess]:checked', '#answerOptions').val();
   const correctAnswer = store.questions[store.questionNumber].correctAnswer;
-
+  //reset all radio button options to unchecked and reset submitDisabled to 'disabled' for next question
+  store.optionA = '';
+  store.optionB = '';
+  store.optionC = '';
+  store.optionD = '';
+  store.submitDisabled = 'disabled';
   return selectedAnswer === correctAnswer;
 }
 
@@ -228,7 +238,11 @@ function handleContinueQuizClick() {
 function handleEnableSubmitAnswer() {
   //enable submit button on question after an answer is selected (disabled initally to prevent skipping without answering)
   $('body').on('click', 'input', event => {
-    $('button').removeAttr('disabled');
+    let selectedItem = $('input[name=guess]:checked').attr('id');
+    store[selectedItem] = 'checked';
+    store.submitDisabled = '';
+
+    render();
   });
 }
 
@@ -285,16 +299,16 @@ function getQuestionHtmlString() {
     <section id="form-group">
       <form id="answerOptions">
         <p>Please select your answer from the following:</p>
-        <input type="radio" id="optionA" name="guess" value="${currQ.answers[0]}">
+        <input type="radio" id="optionA" name="guess" value="${currQ.answers[0]}" ${store.optionA}>
         <label for="optionA">${currQ.answers[0]}</label><br>
-        <input type="radio" id="optionB" name="guess" value="${currQ.answers[1]}">
+        <input type="radio" id="optionB" name="guess" value="${currQ.answers[1]}" ${store.optionB}>
         <label for="optionB">${currQ.answers[1]}</label><br>  
-        <input type="radio" id="optionC" name="guess" value="${currQ.answers[2]}">
+        <input type="radio" id="optionC" name="guess" value="${currQ.answers[2]}" ${store.optionC}>
         <label for="optionC">${currQ.answers[2]}</label><br>
-        <input type="radio" id="optionD" name="guess" value="${currQ.answers[3]}">
+        <input type="radio" id="optionD" name="guess" value="${currQ.answers[3]}" ${store.optionD}>
         <label for="optionD">${currQ.answers[3]}</label><br><br>
       </form>
-      <button id="submitAnswer" disabled>Submit</button>
+      <button id="submitAnswer" ${store.submitDisabled}>Submit</button>
     </section>
     <section id="progressResults">
       <section>Question ${currQNum + 1} of ${store.questions.length}</section>
