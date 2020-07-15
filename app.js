@@ -116,7 +116,7 @@ const store = {
       answers: [
         'Notorious',
         'Bad Santa',
-        'Straight outta Compton',
+        'Straight Outta Compton',
         'The Sandlot'
       ],
       correctAnswer: 'The Sandlot',
@@ -143,6 +143,11 @@ const store = {
   answerStatusClass:  '',
   answerStatus: '',
   questionNumber: 0,
+  NOT_STARTED: 0,
+  QUESTION: 1,
+  FEEDBACK: 2,
+  RESULTS: 3,
+  quizState: 0,
   score: 0
 };
 
@@ -166,26 +171,26 @@ function main() {
     }
 
     store.questionNumber++;
-
-    render(getFeedbackViewHtml());
+    store.currentQuizState = store.FEEDBACK;
+    render();
   });
 
   //FeedbackView 'next' button event handler
   $('body').on('click', '#continueQuiz', event => {
     if (store.questionNumber < store.questions.length) {
-      //continue to next question
-      render(getQuestionViewHtml());
+      //next question
+      store.currentQuizState = store.QUESTION;
     } else {
       //quiz is over, go to ResultsView
-      render(getResultsViewHtml());
+      store.currentQuizState = store.RESULTS;
     }
+    render();
   });
 
   //Intro/Results "start quiz" button event handler
   $('body').on('click', '#startQuiz', event => {
-    store.score = 0;
-    store.questionNumber = 0;
-    render(getQuestionViewHtml());
+    startQuiz();
+    render();
   });
 
 
@@ -196,9 +201,16 @@ function main() {
 
 
 
-  /********* RENDER INTIAL PAGE INTRO VIEW **************/
-  //Display introView on inital document load
-  render(getIntroViewHtml());
+  /********* RENDER INTIAL START PAGE INTRO VIEW **************/
+  render();
+}
+
+
+function startQuiz() {
+  store.score = 0;
+  store.questionNumber = 0;
+  store.quizStarted = true;
+  store.currentQuizState = store.QUESTION;
 }
 
 function checkAnswer() {
@@ -209,41 +221,43 @@ function checkAnswer() {
 }
 
 
-/********** TEMPLATE GENERATION FUNCTIONS **********/
-// These functions return HTML templates
 
-//NOTE: these could be refactored into a single getView(view) method and use switch/case on view parm to call appropriate getXHtmlString method or merged with the 'get{VIEW}HtmlString()' methods
-function getIntroViewHtml() {
-  const htmlString = getIntroHtmlString();
-  return htmlString;
-}
-
-function getQuestionViewHtml() {
-  const htmlString = getQuestionHtmlString();
-  return htmlString;
-}
-
-function getFeedbackViewHtml() {
-  const htmlString = getFeedbackHtmlString();
-  return htmlString;
-}
-
-function getResultsViewHtml() {
-  const htmlString = getResultsHtmlString();
-  return htmlString;
-}
 
 
 /********** RENDER FUNCTION(S) **********/
+function render() {
+  let renderHtmlString = '';
 
-// This function conditionally replaces the contents of the <main> tag based on the state of the store
-function render(html) {
-  $('main').html(html);
+  console.log("Quiz Started: " + store.quizStarted);
+  console.log("Current Quiz State: " + store.currentQuizState);
+
+  if(!store.quizStarted) {
+    startQuiz();
+    renderHtmlString = getIntroHtmlString(); 
+  } else {
+    switch(store.currentQuizState) {
+    case store.QUESTION:
+      renderHtmlString = getQuestionHtmlString();
+      break;
+    case store.FEEDBACK:
+      renderHtmlString = getFeedbackHtmlString();
+      break;
+    case store.RESULTS:
+      renderHtmlString = getResultsHtmlString();
+      break;
+    default:
+      renderHtmlString = `<h3>Please accept our apoligies! We're experiencing technical difficulties at this time.  Please try again later.</h3>`;
+    }
+  }
+  return $('main').html(renderHtmlString);
 }
 
 
 
-/******* These functions return html string template literals ******/
+
+/********** TEMPLATE GENERATION FUNCTIONS **********/
+// These functions return HTML templates
+
 function getIntroHtmlString() {
   return `
     <section class="center">
