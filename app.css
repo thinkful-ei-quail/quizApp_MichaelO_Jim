@@ -68,6 +68,7 @@ button {
 }
 
 #result {
+  box-sizing: border-box;
   font-weight: bold;
   font-size: 1.5em;
   padding: 10px 30px;
