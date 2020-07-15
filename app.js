@@ -155,53 +155,13 @@ const store = {
 /*This function is to be run on document load to start application processing */
 function main() {
 
-  /**********  EVENT HANDLER FUNCTIONS **********/
-
-  //QuestionView 'submitAnswer' button event handler
-  $('body').on('click', '#submitAnswer', event => {
-    store.correct = checkAnswer();
-
-    if (store.correct) {
-      store.score++;
-      store.answerStatusClass = 'correctAnswer';
-      store.answerStatus = 'CORRECT';
-    } else {
-      store.answerStatusClass = 'incorrectAnswer';
-      store.answerStatus = 'INCORRECT';
-    }
-
-    store.questionNumber++;
-    store.currentQuizState = store.FEEDBACK;
-    render();
-  });
-
-  //FeedbackView 'next' button event handler
-  $('body').on('click', '#continueQuiz', event => {
-    if (store.questionNumber < store.questions.length) {
-      //next question
-      store.currentQuizState = store.QUESTION;
-    } else {
-      //quiz is over, go to ResultsView
-      store.currentQuizState = store.RESULTS;
-    }
-    render();
-  });
-
-  //Intro/Results "start quiz" button event handler
-  $('body').on('click', '#startQuiz', event => {
-    startQuiz();
-    render();
-  });
-
-
-  //enable submit button on question after an answer is selected (disabled initally to prevent skipping without answering)
-  $('body').on('click', 'input', event => {
-    $('button').removeAttr('disabled');
-  });
-
-
-
-  /********* RENDER INTIAL START PAGE INTRO VIEW **************/
+  // Register event handlers
+  handleStartQuizClick();
+  handleSubmitAnswerClick();
+  handleContinueQuizClick();
+  handleEnableSubmitAnswer();
+  
+  // Render intial intro view
   render();
 }
 
@@ -222,14 +182,60 @@ function checkAnswer() {
 
 
 
+/**********  EVENT HANDLER FUNCTIONS **********/
+function handleStartQuizClick() {
+  //Intro/Results "start quiz" button event handler
+  $('body').on('click', '#startQuiz', event => {
+    startQuiz();
+    render();
+  });
+}
+
+function handleSubmitAnswerClick() {
+  //QuestionView 'submitAnswer' button event handler
+  $('body').on('click', '#submitAnswer', event => {
+    store.correct = checkAnswer();
+  
+    if (store.correct) {
+      store.score++;
+      store.answerStatusClass = 'correctAnswer';
+      store.answerStatus = 'CORRECT';
+    } else {
+      store.answerStatusClass = 'incorrectAnswer';
+      store.answerStatus = 'INCORRECT';
+    }
+  
+    store.questionNumber++;
+    store.currentQuizState = store.FEEDBACK;
+    render();
+  });
+}
+
+function handleContinueQuizClick() {
+  //FeedbackView 'next' button event handler
+  $('body').on('click', '#continueQuiz', event => {
+    if (store.questionNumber < store.questions.length) {
+      //next question
+      store.currentQuizState = store.QUESTION;
+    } else {
+      //quiz is over, go to ResultsView
+      store.currentQuizState = store.RESULTS;
+    }
+    render();
+  });
+}
+
+function handleEnableSubmitAnswer() {
+  //enable submit button on question after an answer is selected (disabled initally to prevent skipping without answering)
+  $('body').on('click', 'input', event => {
+    $('button').removeAttr('disabled');
+  });
+}
 
 
 /********** RENDER FUNCTION(S) **********/
 function render() {
   let renderHtmlString = '';
-
-  console.log("Quiz Started: " + store.quizStarted);
-  console.log("Current Quiz State: " + store.currentQuizState);
 
   if(!store.quizStarted) {
     startQuiz();
@@ -246,7 +252,7 @@ function render() {
       renderHtmlString = getResultsHtmlString();
       break;
     default:
-      renderHtmlString = `<h3>Please accept our apoligies! We're experiencing technical difficulties at this time.  Please try again later.</h3>`;
+      renderHtmlString = '<h3>Please accept our apoligies! We\'re experiencing technical difficulties at this time.  Please try again later.</h3>';
     }
   }
   return $('main').html(renderHtmlString);
