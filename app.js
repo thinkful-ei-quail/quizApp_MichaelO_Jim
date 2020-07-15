@@ -34,7 +34,7 @@ const store = {
       fact: 'Most of the film’s special effects were computer-generated, but not everything was digital. For the robot cockpit scenes, del Toro had his team build the interior of a full-scale Jaeger head. The finished product stood four stories tall and weighed 20 tons. And like a Tilt-A-Whirl from hell, it was designed to rock around violently on its platform via a network of hydraulics. Once inside, the actors were forced to don 40-pound suits of armor. Then the crew strapped their feet into an apparatus that Charlie Hunnam has compared to a high-resistance elliptical machine.'
     },
     {
-      question: 'Not knowing this answer would be “Inconceivable”. There are many famous lines from “The Princess Bride" including, “I am ______________. You killed my father. Prepare to die”',
+      question: 'Not knowing this answer would be “Inconceivable”. There are many famous lines from “The Princess Bride" including, “My name is ______________. You killed my father. Prepare to die”',
       answers: [
         'John Rambo',
         'Inigo Montoya',
@@ -139,13 +139,13 @@ const store = {
     }
   ],
   quizStarted: false,
+  correct: true,
+  answerStatusClass:  '',
+  answerStatus: '',
   questionNumber: 0,
   score: 0
 };
 
-let correct = true;
-let answerStatusClass = '';
-let answerStatus = '';
 
 /*This function is to be run on document load to start application processing */
 function main() {
@@ -154,15 +154,15 @@ function main() {
 
   //QuestionView 'submitAnswer' button event handler
   $('body').on('click', '#submitAnswer', event => {
-    correct = checkAnswer();
+    store.correct = checkAnswer();
 
-    if (correct) {
+    if (store.correct) {
       store.score++;
-      answerStatusClass = 'correctAnswer';
-      answerStatus = 'CORRECT';
+      store.answerStatusClass = 'correctAnswer';
+      store.answerStatus = 'CORRECT';
     } else {
-      answerStatusClass = 'incorrectAnswer';
-      answerStatus = 'INCORRECT';
+      store.answerStatusClass = 'incorrectAnswer';
+      store.answerStatus = 'INCORRECT';
     }
 
     store.questionNumber++;
@@ -294,7 +294,7 @@ function getFeedbackHtmlString() {
     </section>
     <section id="result">
       Your answer was:
-      <span class="${answerStatusClass}">${answerStatus}</span>
+      <span class="${store.answerStatusClass}">${store.answerStatus}</span>
     </section>
     <section id="answerBlock">
       The correct answer is:
